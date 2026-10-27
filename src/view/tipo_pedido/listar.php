@@ -9,7 +9,7 @@
     <!-- Fuentes y CDN -->
     <link rel="stylesheet" href="assets/libs/css/bootstrap-5.0.2-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/Img/Iconos/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="assets/libs/css/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/libs/css/iconos.css">
     <link rel="stylesheet" href="assets/libs/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="assets/libs/css/estilo.css">
 </head>
@@ -253,12 +253,14 @@
 
     <!-- Scripts -->
     <script src="assets/libs/jquery-4.0.0.min.js"></script>
-    <script src="assets/js/helpers/expresiones.js"></script>
     <script src="assets/libs/css/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
     <script src="assets/libs/jquery.dataTables.min.js"></script>
     <script src="assets/libs/dataTables.bootstrap5.min.js"></script>
     <script src="assets/libs/sweetalert2.all.min.js"></script>
-    <script src="assets/js/tipopedido.js"></script>
+    <script type="importmap">
+        {"imports":{"jquery":"./assets/js/helpers/jquery-bridge.js"}}
+    </script>
+    <script type="module" src="assets/js/tipopedido.js"></script>
 
 </body>
 

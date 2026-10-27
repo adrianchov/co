@@ -1,5 +1,4 @@
 let tablaDataTable = null;
-let todosLosUsuarios = [];
 let verEliminados = false;
 
 $(document).ready(function () {
@@ -134,7 +133,7 @@ $(document).ready(function () {
         valido = $.validarCampo($password, {
             requerido: passwordEsObligatoria,
             patron: /^.{6,255}$/,
-            mensaje: 'La contraseña debe tener at least 6 caracteres.'
+            mensaje: 'La contraseña debe tener al menos 6 caracteres.'
         }) && valido;
 
         valido = $.validarCampo($confirmar, {
@@ -200,7 +199,7 @@ $(document).ready(function () {
 
         let valido = validarFormularioUsuario($('#formRegistrarUsuario')) && validarContrasenas($('#formRegistrarUsuario'));
         if ($('#reg_es_empleado').prop('checked') && !$('#reg_id_empleado').val()) {
-            Swal.fire({ icon: 'warning', title: 'Empleado requerido', text: 'Si el usuario is empleado, seleccione el empleado asociado.' });
+            Swal.fire({ icon: 'warning', title: 'Empleado requerido', text: 'Si el usuario es empleado, seleccione el empleado asociado.' });
             return;
         }
         if (!valido) {
@@ -224,7 +223,7 @@ $(document).ready(function () {
                 }
             },
             error: function () {
-                Swal.fire({ icon: 'error', title: 'Error', text: 'Error de comunicación with el servidor.' });
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Error de comunicación con el servidor.' });
             }
         });
     });
@@ -261,7 +260,7 @@ $(document).ready(function () {
 
         let valido = validarFormularioUsuario($('#formEditarActivo')) && validarContrasenas($('#formEditarActivo'));
         if ($('#edit_es_empleado').prop('checked') && !$('#edit_id_empleado').val()) {
-            Swal.fire({ icon: 'warning', title: 'Empleado requerido', text: 'Si el usuario is empleado, seleccione el empleado asociado.' });
+            Swal.fire({ icon: 'warning', title: 'Empleado requerido', text: 'Si el usuario es empleado, seleccione el empleado asociado.' });
             return;
         }
         if (!valido) {
@@ -285,7 +284,7 @@ $(document).ready(function () {
                 }
             },
             error: function () {
-                Swal.fire({ icon: 'error', title: 'Error', text: 'Error de comunicación with el servidor.' });
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Error de comunicación con el servidor.' });
             }
         });
     });
@@ -323,7 +322,7 @@ $(document).ready(function () {
                 }
             },
             error: function () {
-                Swal.fire({ icon: 'error', title: 'Error', text: 'Error de comunicación with el servidor.' });
+                Swal.fire({ icon: 'error', title: 'Error', text: 'Error de comunicación con el servidor.' });
             }
         });
     });
@@ -334,7 +333,7 @@ $(document).ready(function () {
 
         Swal.fire({
             title: '¿Inactivar usuario?',
-            text: `El usuario "${nombre}" no podrá iniciar sesión until ser reactivado.`,
+            text: `El usuario "${nombre}" no podrá iniciar sesión hasta ser reactivado.`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#dc2626',
@@ -356,7 +355,7 @@ $(document).ready(function () {
                         }
                     },
                     error: function () {
-                        Swal.fire({ icon: 'error', title: 'Error', text: 'Error de comunicación with el servidor.' });
+                        Swal.fire({ icon: 'error', title: 'Error', text: 'Error de comunicación con el servidor.' });
                     }
                 });
             }
@@ -364,17 +363,9 @@ $(document).ready(function () {
     });
 
     $('#modalRegistrarUsuario').on('hidden.bs.modal', function () {
-        limparFormularioCrear();
+        limpiarFormularioCrear();
     });
 
     initDataTable();
     filtrarVistaActual();
 });
-
-function limparFormularioCrear() {
-    $('#formRegistrarUsuario').trigger('reset');
-    $.limpiarValidaciones('#formRegistrarUsuario');
-    $('#reg_empleado_wrap').addClass('d-none');
-    $('#reg_id_empleado').html('<option value="">Seleccione el empleado...</option>');
-    $('#reg_es_empleado').prop('checked', false);
-}

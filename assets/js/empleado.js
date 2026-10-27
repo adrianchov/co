@@ -44,7 +44,6 @@ $(document).ready(function () {
             const idCampo = $campo.attr('id');
             if (!idCampo) return true;
 
-            // Cédula solo se valida al registrar (en edición está deshabilitada)
             if (/cedula$/.test(idCampo) && !incluyeCedula) return true;
 
             const regla = reglasParaCampo(idCampo);
@@ -58,7 +57,6 @@ $(document).ready(function () {
         return valido;
     }
 
-    // Revalida en tiempo real un campo que ya está marcado como inválido
     $('#modalRegistrarEmpleado, #modalEditarActivo').on('input change', 'input, select, textarea', function () {
         const $campo = $(this);
         if ($campo.hasClass('is-invalid')) {
@@ -251,7 +249,6 @@ $(document).ready(function () {
         let esUsuario = $('#reg_es_usuario').prop('checked');
         let idUsuario = $('#reg_id_usuario').val();
 
-        // Validación por campo (marca is-invalid + feedback debajo de cada input)
         $.limpiarValidaciones('#formEmpleado');
         if (!validarCamposFormulario($('#formEmpleado'), true)) {
             Swal.fire('Datos inválidos', 'Corrige los campos marcados en rojo.', 'warning');
@@ -317,7 +314,6 @@ $(document).ready(function () {
         let esUsuario = $('#edit_es_usuario').prop('checked');
         let idUsuario = $('#edit_id_usuario').val();
 
-        // Validación por campo (la cédula no se valida aquí porque no es editable)
         $.limpiarValidaciones('#formEditarActivo');
         if (!validarCamposFormulario($('#formEditarActivo'), false)) {
             Swal.fire('Datos inválidos', 'Corrige los campos marcados en rojo.', 'warning');

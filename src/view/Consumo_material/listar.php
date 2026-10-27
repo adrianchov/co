@@ -7,7 +7,7 @@
     <title>Idéalo - Consumo de Material</title>
     <link rel="stylesheet" href="assets/libs/css/bootstrap-5.0.2-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/Img/Iconos/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="assets/libs/css/icons.css">
+    <link rel="stylesheet" href="assets/libs/css/iconos.css">
     <link rel="stylesheet" href="assets/libs/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="assets/libs/css/estilo.css">
 </head>
@@ -40,7 +40,6 @@
                             <tr>
                                 <th>ID</th>
                                 <th>Materia Prima / Descripción</th>
-                                <th>Producto</th>
                                 <th>Costo Unitario</th>
                                 <th>Cantidad Usada</th>
                                 <th>Costo Total</th>
@@ -134,17 +133,20 @@
                                     <option value="">Seleccione una orden</option>
                                     <?php $ordenes = $ordenes ?? []; ?>
                                     <?php foreach ($ordenes as $orden): ?>
-                                        <option value="<?php echo htmlspecialchars($orden['id_produccion'] ?? ''); ?>"
-                                            data-producto="<?php echo htmlspecialchars($orden['producto_asociado'] ?? ''); ?>">
-                                            OP-<?php echo str_pad((string)($orden['id_produccion'] ?? 0), 4, '0', STR_PAD_LEFT); ?>
-                                            - <?php echo htmlspecialchars($orden['descripcion_pedido'] ?? 'Sin pedido'); ?>
+                                        <?php
+                                        $labelOrden = 'Orden #' . ($orden['id_produccion'] ?? 'N/A');
+                                        if (!empty($orden['descripcion_pedido'])) {
+                                            $labelOrden .= ' - ' . $orden['descripcion_pedido'];
+                                        }
+                                        if (!empty($orden['estado_de_produccion'])) {
+                                            $labelOrden .= ' - ' . $orden['estado_de_produccion'];
+                                        }
+                                        ?>
+                                        <option value="<?php echo htmlspecialchars($orden['id_produccion'] ?? ''); ?>">
+                                            <?php echo htmlspecialchars($labelOrden); ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Producto asociado a la orden</label>
-                                <input type="text" class="form-control" id="registrar_producto_asociado" readonly placeholder="Se completa al seleccionar la orden">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Costo unitario</label>
@@ -199,17 +201,20 @@
                                 <select class="form-select" name="id_produccion" id="edit_id_produccion" required>
                                     <option value="">Seleccione una orden</option>
                                     <?php foreach ($ordenes as $orden): ?>
-                                        <option value="<?php echo htmlspecialchars($orden['id_produccion'] ?? ''); ?>"
-                                            data-producto="<?php echo htmlspecialchars($orden['producto_asociado'] ?? ''); ?>">
-                                            OP-<?php echo str_pad((string)($orden['id_produccion'] ?? 0), 4, '0', STR_PAD_LEFT); ?>
-                                            - <?php echo htmlspecialchars($orden['descripcion_pedido'] ?? 'Sin pedido'); ?>
+                                        <?php
+                                        $labelOrden = 'Orden #' . ($orden['id_produccion'] ?? 'N/A');
+                                        if (!empty($orden['descripcion_pedido'])) {
+                                            $labelOrden .= ' - ' . $orden['descripcion_pedido'];
+                                        }
+                                        if (!empty($orden['estado_de_produccion'])) {
+                                            $labelOrden .= ' - ' . $orden['estado_de_produccion'];
+                                        }
+                                        ?>
+                                        <option value="<?php echo htmlspecialchars($orden['id_produccion'] ?? ''); ?>">
+                                            <?php echo htmlspecialchars($labelOrden); ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Producto asociado a la orden</label>
-                                <input type="text" class="form-control" id="edit_producto_asociado" readonly placeholder="Se completa al seleccionar la orden">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Costo unitario</label>
@@ -235,12 +240,19 @@
     </div>
 
     <script src="assets/libs/jquery-4.0.0.min.js"></script>
-    <script src="assets/js/helpers/expresiones.js"></script>
     <script src="assets/libs/bootstrap.bundle.min.js"></script>
     <script src="assets/libs/jquery.dataTables.min.js"></script>
     <script src="assets/libs/dataTables.bootstrap5.min.js"></script>
     <script src="assets/libs/sweetalert2.all.min.js"></script>
-    <script src="assets/js/consumo_material.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "jquery": "./assets/js/helpers/jquery-bridge.js",
+                "sweetalert2": "./assets/js/helpers/sweetalert2-bridge.js"
+            }
+        }
+    </script>
+    <script type="module" src="assets/js/consumo_material.js"></script>
 </body>
 
 </html>

@@ -1,3 +1,12 @@
+import $ from 'jquery';
+import {
+    successAlert,
+    errorAlert,
+    editAlert,
+    confirmActionAlert
+} from './helpers/alerts.js';
+import { patrones } from './helpers/expresiones.js';
+
 $(document).ready(function () {
     const $tablaBody = $('#tbodyConsumos');
     const $formRegistrarConsumo = $('#formRegistrarConsumo');
@@ -27,7 +36,7 @@ $(document).ready(function () {
         }
 
         if (esValido && $campo.attr('name') === 'descripcion_de_consumo' && valor !== '') {
-            esValido = $.expresionesRegulares.validar('descripcion', valor);
+            esValido = patrones.descripcion.test(valor);
         }
 
         marcarCampo($campo, esValido);
@@ -51,26 +60,13 @@ $(document).ready(function () {
     }
 
     async function confirmarAccion(titulo, texto) {
-        return await Swal.fire({
-            title: titulo,
-            text: texto,
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#198754',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, continuar',
-            cancelButtonText: 'Cancelar'
-        });
+        return await confirmActionAlert(titulo, texto);
     }
 
     async function mostrarAlertaInformativa(titulo, texto, icono) {
-        return await Swal.fire({
-            title: titulo,
-            text: texto,
-            icon: icono,
-            timer: 2000,
-            showConfirmButton: false
-        });
+        return icono === 'error'
+            ? await errorAlert(titulo, texto)
+            : await successAlert(titulo, texto);
     }
 
     function cargarCostoMateriaPrima(idMateriaPrima) {
@@ -129,10 +125,10 @@ $(document).ready(function () {
             }
         }).done(async function (data) {
             if (data.success) {
-                await mostrarAlertaInformativa('¡Éxito!', data.message || 'Guardado correctamente.', 'success');
+                const alertaExito = $form.is($formEditarConsumo) ? editAlert : successAlert;
+                await alertaExito('¡Éxito!', data.message || 'Guardado correctamente.');
                 if ($modal.length) $modal.modal('hide');
                 $form[0].reset();
-                actualizarProductoAsociado($form);
                 limpiarValidaciones($form);
                 fetchConsumos();
             } else {
@@ -193,19 +189,22 @@ $(document).ready(function () {
                         .append(' ' + (consumo.descripcion_de_consumo || 'Sin descripción'))
                 );
             $fila.append($material);
-                $fila.append(
-                    $('<td>').text(consumo.producto_asociado || 'Producto no disponible')
-                );
 
-                $fila.append($('<td>', { class: 'fw-bold text-muted' }).text('$' + costoUnitario.toFixed(2)));
+            $fila.append($('<td>', { class: 'fw-bold text-muted' }).text('$' + costoUnitario.toFixed(2)));
             $fila.append($('<td>', { class: 'fw-bold' }).text((consumo.cantidad_usada || 0) + ' ' + (consumo.unidad_de_medida || '')));
             $fila.append($('<td>', { class: 'text-success fw-bold' }).text('$' + costoTotal));
-            $fila.append(
-                $('<td>').append(
+            const $produccion = $('<td>')
+                .append(
                     $('<span>', { class: 'badge bg-secondary' })
-                        .text('OP-' + String(consumo.id_produccion || 0).padStart(4, '0'))
-                )
-            );
+                        .text('Orden #' + (consumo.id_produccion || 'N/A'))
+                );
+            if (consumo.descripcion_pedido) {
+                $produccion.append($('<div>', { class: 'small mt-1' }).text(consumo.descripcion_pedido));
+            }
+            if (consumo.estado_de_produccion) {
+                $produccion.append($('<small>', { class: 'text-muted d-block' }).text(consumo.estado_de_produccion));
+            }
+            $fila.append($produccion);
 
             const $botonEditar = $('<button>', {
                 type: 'button',
@@ -248,22 +247,6 @@ $(document).ready(function () {
             responsive: true
         });
     }
-
-    function actualizarProductoAsociado($form) {
-        const $orden = $form.find('[name="id_produccion"] option:selected');
-        const producto = $orden.attr('data-producto') || '';
-        const selectorProducto = $form.is($formRegistrarConsumo)
-            ? '#registrar_producto_asociado'
-            : '#edit_producto_asociado';
-
-        $form.find(selectorProducto).val(producto);
-    }
-
-    [$formRegistrarConsumo, $formEditarConsumo].forEach(function ($form) {
-        $form.on('change', '[name="id_produccion"]', function () {
-            actualizarProductoAsociado($form);
-        });
-    });
 
     [$formRegistrarConsumo, $formEditarConsumo].forEach(function ($form) {
         $form.on('input change', 'input:not([type="hidden"]), select, textarea', function () {
@@ -324,7 +307,6 @@ $(document).ready(function () {
         $('#edit_id_consumo_material').val($boton.attr('data-id_consumo_material') || '');
         $('#edit_id_materia_prima').val($boton.attr('data-id_materia_prima') || '');
         $('#edit_id_produccion').val($boton.attr('data-id_produccion') || '');
-        actualizarProductoAsociado($formEditarConsumo);
         $('#edit_costo_unitario').val($boton.attr('data-costo_unitario') || '');
         $('#edit_cantidad_usada').val($boton.attr('data-cantidad_usada') || '');
         $('#edit_descripcion_de_consumo').val($boton.attr('data-descripcion_de_consumo') || '');

@@ -6,7 +6,7 @@
     <title>Idéalo - Cuentas Bancarias</title>
     <link rel="stylesheet" href="assets/libs/css/bootstrap-5.0.2-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/Img/Iconos/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="assets/libs/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="assets/libs/css/estilo.css">
 </head>
 <body>
@@ -24,9 +24,7 @@
                 <button type="button" id="btnAlternarEstado" class="btn btn-outline-secondary px-3 py-2" data-vista="activos" onclick="alternarVistaInhabilitados('tablaCuentas')">
                     <i class="bi bi-eye-slash-fill me-1" id="iconoEstado"></i> <span id="txtBotonEstado">Ver inhabilitados</span>
                 </button>
-                <button type="button" id="btnGenerarReporteCuentas" class="btn btn-outline-danger px-2 py-1" style="border-radius: var(--radius-md); font-weight: 600;">
-                    <i class="bi bi-file-earmark-pdf-fill me-1"></i> Generar Reporte
-                </button>
+                
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalRegistrarCuenta">
                     <i class="bi bi-bank"></i> Registrar Cuenta
                 </button>
@@ -150,12 +148,14 @@
     </div>
 </div>
 <script src="assets/libs/jquery-4.0.0.min.js"></script>
-<script src="assets/js/helpers/expresiones.js"></script>
 <script src="assets/libs/css/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="assets/js/finanzas.js"></script>
+<script src="assets/libs/jquery.dataTables.min.js"></script>
+<script src="assets/libs/dataTables.bootstrap5.min.js"></script>
+<script src="assets/libs/sweetalert2.all.min.js"></script>
+<script type="importmap">
+    {"imports":{"jquery":"./assets/js/helpers/jquery-bridge.js"}}
+</script>
+<script type="module" src="assets/js/finanzas.js"></script>
 
 <script>
 function cargarDatosEdicionCuenta(id, titular, ident, tipo, metodo) {
@@ -165,15 +165,6 @@ function cargarDatosEdicionCuenta(id, titular, ident, tipo, metodo) {
     document.getElementById('edit_cta_tipo').value = tipo;
     document.getElementById('edit_cta_metodo').value = metodo;
 }
-
-document.getElementById('btnGenerarReporteCuentas').addEventListener('click', function() {
-    const btnAlternar = document.getElementById('btnAlternarEstado');
-    const vistaActual = btnAlternar ? btnAlternar.getAttribute('data-vista') : 'activos';
-    const estadoFiltro = (vistaActual === 'inhabilitados') ? 'inhabilitados' : 'activos';
-    
-    const urlReporte = `index.php?controller=Finanzas&action=cuentas&accion=generar_reporte&tipo=cuentas&estado=${estadoFiltro}`;
-    window.open(urlReporte, '_blank');
-});
 </script>
 </body>
 </html>
