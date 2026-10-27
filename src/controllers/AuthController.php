@@ -7,6 +7,7 @@ require_once __DIR__ . "/../../config/smtp_config.php";
 require_once __DIR__ . "/../../config/mailer.php";
 require_once __DIR__ . "/../helpers/RecuperacionPasswordHelper.php";
 
+use Exception;
 use Idealo\Models\UsuarioModel;
 use Idealo\Config\Mailer;
 use Idealo\Helpers\RecuperacionPasswordHelper;

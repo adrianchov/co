@@ -252,7 +252,7 @@
         </form>
 
         <div class="link-back">
-            <a href="index.php?controller=auth&action=solicitar"><i class="bi bi-arrow-left"></i> Volver atrás</a>
+            <a href="index.php?controller=auth&action=recuperar"><i class="bi bi-arrow-left"></i> Volver atrás</a>
         </div>
     </div>
 

@@ -2,7 +2,7 @@
 
 namespace Idealo\Helpers;
 
-class RecuperacionPasswordHelper
+trait RecuperacionTrait
 {
     public static function generarCodigo(): string
     {
@@ -60,12 +60,7 @@ class RecuperacionPasswordHelper
     }
 }
 
-
-
-
-
-
-
-
-
-
+class RecuperacionPasswordHelper
+{
+    use RecuperacionTrait;
+}
